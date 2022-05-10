@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-mock-temperature-wilson-liao
+  labels:
+    name: assignment
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      component: mqtt-mock
+      student: wilson-liao
+  template:
+    metadata:
+      labels:
+        component: mqtt-mock
+        student: wilson-liao
+    spec:
+      containers:
+        - name: mqtt
+          image: wilsonliao/edge-mock-temperature:0.0.1
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 20m
+              memory: 64Mi
+              ephemeral-storage: 128Mi
+            requests:
+              cpu: 20m
+              memory: 64Mi
+          env:
+            - name: ENSAAS_SERVICES
+              valueFrom:
+                secretKeyRef:
+                  name: assignment-secret
+                  key: ENSAAS_SERVICES
